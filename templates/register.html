@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %} — Registro{% endblock %}
+
+{% block content %}
+<style>
+    .auth-box {
+        margin: 40px auto;
+        max-width: 320px;
+        text-align: left;
+    }
+    .auth-box label  { display: block; margin-bottom: 4px; color: #aaa; font-size: 0.9em; }
+    .auth-box input  { width: 100%; margin-bottom: 14px; }
+    .auth-box button { width: 100%; margin-top: 4px; }
+    .auth-footer { margin-top: 20px; font-size: 0.9em; color: #aaa; text-align: center; }
+    .auth-footer a { color: #7ec8e3; }
+</style>
+
+<div class="auth-box">
+    <h2>Crear cuenta</h2>
+    <form method="POST">
+        <label>Callsign</label>
+        <input type="text" name="callsign" placeholder="LU2FTI" required autofocus
+               style="text-transform: uppercase;">
+
+        <label>Contraseña</label>
+        <input type="password" name="password" required>
+
+        <label>Confirmar contraseña</label>
+        <input type="password" name="confirm" required>
+
+        <button type="submit" class="btn-green">Registrarme</button>
+    </form>
+    <div class="auth-footer">
+        ¿Ya tenés cuenta? <a href="{{ url_for('auth.login') }}">Iniciá sesión</a>
+    </div>
+</div>
+{% endblock %}

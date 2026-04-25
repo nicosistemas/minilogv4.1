@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  minilog:
+    build: .
+    container_name: minilog_app
+    restart: always
+    expose:
+      - "5000"
+    environment:
+      - SECRET_KEY=${SECRET_KEY:-changeme-in-production}
+      - STORAGE_BACKEND=csv
+    volumes:
+      - ./data:/app/data            # Datos en carpeta local del proyecto
+      - ./cty.dat:/app/cty.dat:ro  # Archivo de países DXCC (read-only)
+
+  nginx:
+    image: nginx:alpine
+    container_name: minilog_nginx
+    restart: always
+    ports:
+      - "5001:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/htpasswd:/etc/nginx/htpasswd
+    depends_on:
+      - minilog

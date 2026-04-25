@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %} — Editar contacto{% endblock %}
+
+{% block content %}
+<style>
+    .edit-box {
+        margin: 30px auto;
+        max-width: 340px;
+        text-align: left;
+    }
+    .edit-box label  { display: block; margin-bottom: 4px; color: #aaa; font-size: 0.9em; }
+    .edit-box input,
+    .edit-box select { width: 100%; margin-bottom: 14px; }
+    .edit-box button { width: 100%; }
+    .back { display: inline-block; margin-top: 16px; color: #aaa; font-size: 0.9em; }
+</style>
+
+<h2>Editar contacto</h2>
+
+<div class="edit-box">
+    <form method="POST">
+        <label>Callsign</label>
+        <input type="text" name="callsign" value="{{ contact[1] }}" required
+               style="text-transform: uppercase;">
+
+        <label>Modo</label>
+        <select name="mode" required>
+            {% for m in modes %}
+            <option value="{{ m }}" {% if contact[2] == m %}selected{% endif %}>{{ m }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Frecuencia (MHz)</label>
+        <input type="text" name="frequency" value="{{ contact[3] }}" required>
+
+        <label>Notas</label>
+        <input type="text" name="notes" value="{{ contact[4] if contact|length > 4 else '' }}">
+
+        <button type="submit" class="btn-green">Guardar cambios</button>
+    </form>
+
+    <a href="{{ url_for('main.index') }}" class="back">⬅ Volver al log</a>
+</div>
+{% endblock %}
