@@ -8,7 +8,7 @@ RESET_TOKENS_FILE = os.path.join(DATA_DIR, "reset_tokens.json")
 CTY_FILE = os.path.join(BASE_DIR, "cty.dat")
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "changeme-in-production")
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "frida")  # Cambiar en .env
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin1234")  # Cambiar en .env
 
 STORAGE_BACKEND = os.environ.get("STORAGE_BACKEND", "csv")  # csv | sqlite (futuro)
 
@@ -17,3 +17,5 @@ MODES = ["SSB", "CW", "FT8", "FM", "AM", "DIGITALV", "OTHER"]
 CONTACTS_HEADER = ["date", "callsign", "mode", "frequency", "notes", "operator"]
 
 RESET_TOKEN_EXPIRY_MINUTES = 30
+
+BASE_URL = os.environ.get("BASE_URL", "http://localhost:5001")
