@@ -1,6 +1,6 @@
 from flask import Blueprint, redirect, render_template, request, url_for, flash, session
 from models.users import User
-from config import ADMIN_PASSWORD
+from config import ADMIN_PASSWORD, BASE_URL
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
 
@@ -49,7 +49,8 @@ def reset_password(callsign):
         return redirect(url_for("admin.dashboard"))
 
     flash(f"Token generado para {callsign}. Copiá el link de abajo.", "info")
-    return render_template("admin/reset_link.html", callsign=callsign, token=token)
+    reset_url = f"{BASE_URL}/reset/{token}"
+    return render_template("admin/reset_link.html", callsign=callsign, token=token, reset_url=reset_url)
 
 
 @admin_bp.route("/delete/<callsign>", methods=["POST"])
