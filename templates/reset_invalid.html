@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %} — Link inválido{% endblock %}
+{% block content %}
+<div style="margin:60px auto;max-width:400px;text-align:center;">
+    <h2 style="color:#c0392b;">⚠️ Link inválido o expirado</h2>
+    <p style="color:#aaa;margin:16px 0;">Este link de reset ya no es válido. Solicitá uno nuevo al administrador.</p>
+    <a href="{{ url_for('auth.login') }}" class="btn btn-gray" style="padding:8px 20px;">Volver al login</a>
+</div>
+{% endblock %}

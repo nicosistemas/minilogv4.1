@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %} — Restablecer contraseña{% endblock %}
+{% block content %}
+<style>
+.auth-box { margin:40px auto; max-width:320px; text-align:left; }
+.auth-box label { display:block; margin-bottom:4px; color:#aaa; font-size:0.9em; }
+.auth-box input { width:100%; margin-bottom:14px; }
+.auth-box button { width:100%; }
+</style>
+<div class="auth-box">
+    <h2>Restablecer contraseña</h2>
+    <p style="color:#aaa;font-size:0.9em;margin-bottom:16px;">Operador: <strong>{{ callsign }}</strong></p>
+    <form method="POST">
+        <label>Nueva contraseña</label>
+        <input type="password" name="new_password" required minlength="6" autofocus>
+        <label>Confirmar contraseña</label>
+        <input type="password" name="confirm_password" required minlength="6">
+        <button type="submit" class="btn-green">Guardar nueva contraseña</button>
+    </form>
+</div>
+{% endblock %}

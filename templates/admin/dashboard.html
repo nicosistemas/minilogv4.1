@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block title %} — Admin Dashboard{% endblock %}
+{% block content %}
+<style>
+.admin-header { display:flex; justify-content:space-between; align-items:center; margin:16px 0 24px; flex-wrap:wrap; gap:10px; }
+table { width:100%; border-collapse:collapse; margin-top:10px; font-size:0.95em; }
+th, td { border:1px solid #555; padding:10px; text-align:center; background:#222; }
+th { background:#333; }
+.actions form { display:inline; }
+.actions button { padding:4px 10px; font-size:0.85em; border:none; border-radius:4px; cursor:pointer; color:#fff; }
+.btn-reset { background:#e67e22; }
+.btn-delete { background:#c0392b; }
+.section-title { margin:30px 0 10px; font-size:1.1em; color:#aaa; border-bottom:1px solid #333; padding-bottom:6px; text-align:left; }
+
+/* API docs */
+.api-box { background:#1a1a1a; border:1px solid #444; border-radius:8px; padding:20px; margin-top:10px; text-align:left; }
+.api-box h3 { margin-bottom:12px; color:#00FFAA; }
+.api-endpoint { margin-bottom:16px; }
+.api-endpoint .method { display:inline-block; padding:2px 8px; border-radius:4px; font-size:0.8em; font-weight:bold; margin-right:8px; }
+.method-post { background:#2ecc71; color:#000; }
+.method-get  { background:#3498db; color:#fff; }
+.api-url { font-family:monospace; font-size:0.95em; color:#fff; }
+pre { background:#111; border:1px solid #333; border-radius:4px; padding:12px; overflow-x:auto; font-size:0.85em; color:#ccc; margin:8px 0; }
+</style>
+
+<div class="admin-header">
+    <div>
+        <strong>Admin Panel</strong> &nbsp;|&nbsp;
+        <span style="color:#aaa;font-size:0.9em;">{{ users|length }} operadores registrados</span>
+    </div>
+    <div style="display:flex;gap:10px;">
+        <a href="{{ url_for('admin.create_user') }}" class="btn btn-green" style="padding:6px 14px;font-size:0.9em;">+ Nuevo operador</a>
+        <a href="{{ url_for('admin.logout') }}" class="btn btn-gray" style="padding:6px 14px;font-size:0.9em;">Cerrar sesión admin</a>
+    </div>
+</div>
+
+<!-- Tabla de usuarios -->
+<div class="section-title">Operadores registrados</div>
+{% if users %}
+<table>
+    <thead>
+        <tr>
+            <th>Callsign</th>
+            <th>Contactos</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for u in users %}
+        <tr>
+            <td><strong>{{ u.callsign }}</strong></td>
+            <td>{{ u.contacts }}</td>
+            <td class="actions">
+                <form method="POST" action="{{ url_for('admin.reset_password', callsign=u.callsign) }}">
+                    <button type="submit" class="btn-reset">🔑 Generar link de reset</button>
+                </form>
+                &nbsp;
+                <form method="POST" action="{{ url_for('admin.delete_user', callsign=u.callsign) }}"
+                      onsubmit="return confirm('¿Eliminar acceso de {{ u.callsign }}? Sus contactos no se borran.')">
+                    <button type="submit" class="btn-delete">🗑 Eliminar acceso</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p style="color:#777;">Sin operadores registrados.</p>
+{% endif %}
+
+<!-- Documentación de la API -->
+<div class="section-title">Estado y documentación de la API</div>
+<div class="api-box">
+    <h3>🔌 API REST — MiniLog</h3>
+    <p style="color:#aaa;font-size:0.9em;margin-bottom:16px;">
+        Permite registrar QSOs desde software externo (WSJT-X, Log4OM, scripts, etc.)
+    </p>
+
+    <div class="api-endpoint">
+        <span class="method method-get">GET</span>
+        <span class="api-url">/api/status</span>
+        <p style="color:#aaa;font-size:0.85em;margin:4px 0;">Verifica que la API esté activa. No requiere autenticación.</p>
+        <pre>curl http://tu-servidor:5001/api/status</pre>
+    </div>
+
+    <div class="api-endpoint">
+        <span class="method method-post">POST</span>
+        <span class="api-url">/api/qso</span>
+        <p style="color:#aaa;font-size:0.85em;margin:4px 0;">Registra un QSO. No requiere sesión — el operador se identifica con <code>mycall</code>.</p>
+        <pre>curl -X POST http://tu-servidor:5001/api/qso \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer radioaficionado" \
+  -d '{
+    "call":      "K1ABC",
+    "mycall":    "LU2FTI",
+    "mode":      "FT8",
+    "freq":      14.074,
+    "extra":     "notas opcionales",
+    "timestamp": "2026-04-25 14:00:00"
+  }'</pre>
+        <p style="color:#aaa;font-size:0.85em;">
+            Header requerido: <code>Authorization: Bearer radioaficionado</code><br>
+            Campos requeridos: <code>call</code>, <code>mycall</code> (debe estar registrado en el sistema).<br>
+            Opcionales: <code>mode</code>, <code>freq</code> (MHz), <code>extra</code>, <code>timestamp</code> (UTC, default: ahora).
+        </p>
+    </div>
+
+    <div class="api-endpoint">
+        <span class="method method-get">GET</span>
+        <span class="api-url">/api/qso</span>
+        <p style="color:#aaa;font-size:0.85em;margin:4px 0;">Lista todos los QSOs del usuario autenticado.</p>
+        <pre>curl -b cookies.txt http://tu-servidor:5001/api/qso</pre>
+    </div>
+
+    <p style="margin-top:16px;font-size:0.85em;color:#aaa;">
+        Estado en tiempo real: 
+        <a href="/api/status" target="_blank" style="color:#00FFAA;">/api/status ↗</a>
+    </p>
+</div>
+{% endblock %}

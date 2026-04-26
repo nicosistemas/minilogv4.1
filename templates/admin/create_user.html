@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %} — Crear operador{% endblock %}
+{% block content %}
+<style>
+.auth-box { margin:40px auto; max-width:320px; text-align:left; }
+.auth-box label { display:block; margin-bottom:4px; color:#aaa; font-size:0.9em; }
+.auth-box input { width:100%; margin-bottom:14px; }
+.auth-box button { width:100%; }
+</style>
+<div class="auth-box">
+    <h2>Crear nuevo operador</h2>
+    <form method="POST">
+        <label>Callsign</label>
+        <input type="text" name="callsign" placeholder="LU2FTI" required style="text-transform:uppercase;">
+        <label>Contraseña inicial</label>
+        <input type="text" name="password" placeholder="Contraseña" required>
+        <button type="submit" class="btn-green">Crear operador</button>
+    </form>
+    <br>
+    <a href="{{ url_for('admin.dashboard') }}" style="color:#aaa;font-size:0.85em;">⬅ Volver al panel</a>
+</div>
+{% endblock %}

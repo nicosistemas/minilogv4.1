@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %} — Link de Reset{% endblock %}
+{% block content %}
+<style>
+.reset-box { margin:30px auto; max-width:560px; text-align:left; }
+.token-url { background:#1a1a1a; border:1px solid #444; border-radius:6px; padding:14px; font-family:monospace; font-size:0.85em; word-break:break-all; color:#00FFAA; margin:12px 0; }
+</style>
+<div class="reset-box">
+    <h2>🔑 Link de reset para {{ callsign }}</h2>
+    <p style="color:#aaa;">Copiá este link y enviáselo al operador. Expira en <strong>30 minutos</strong>.</p>
+    <div class="token-url" id="token-url">{{ request.host_url }}reset/{{ token }}</div>
+    <button class="btn-green" onclick="copyLink()" style="margin-top:8px;">📋 Copiar link</button>
+    <br><br>
+    <a href="{{ url_for('admin.dashboard') }}" style="color:#aaa;font-size:0.9em;">⬅ Volver al panel</a>
+</div>
+<script>
+function copyLink() {
+    const text = document.getElementById('token-url').innerText;
+    navigator.clipboard.writeText(text).then(() => alert('Link copiado al portapapeles'));
+}
+</script>
+{% endblock %}
