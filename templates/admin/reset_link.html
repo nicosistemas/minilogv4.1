@@ -8,7 +8,7 @@
 <div class="reset-box">
     <h2>🔑 Link de reset para {{ callsign }}</h2>
     <p style="color:#aaa;">Copiá este link y enviáselo al operador. Expira en <strong>30 minutos</strong>.</p>
-    <div class="token-url" id="token-url">{{ request.host_url }}reset/{{ token }}</div>
+    <div class="token-url" id="token-url">{{ reset_url }}</div>
     <button class="btn-green" onclick="copyLink()" style="margin-top:8px;">📋 Copiar link</button>
     <br><br>
     <a href="{{ url_for('admin.dashboard') }}" style="color:#aaa;font-size:0.9em;">⬅ Volver al panel</a>
