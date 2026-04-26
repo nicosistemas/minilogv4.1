@@ -131,6 +131,7 @@ docker compose up -d --build
 | SECRET_KEY       | Clave para firmar sesiones Flask                 | changeme-in-production|
 | ADMIN_PASSWORD   | Contraseña del panel de administracion           |                       |
 | STORAGE_BACKEND  | Backend de almacenamiento: csv (sqlite futuro)   | csv                   |
+| BASE_URL         | IP servidor y ip para link de reset password     |                       |
 
 ---
 
@@ -345,6 +346,9 @@ docker compose down
 
 # Ver archivos de datos
 docker exec minilog_app find /app/data -type f
+
+# Re build force - para que tome las variables del .env
+docker compose up -d --force-recreate minilog
 ```
 
 ---
